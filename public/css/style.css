@@ -2326,3 +2326,143 @@ button {
     padding-top: 10px !important;
 }
 
+
+
+/* =====================================================
+   CLEAN MODERN DEVELOPER WATERMARK (BY DUMA AUGUSTO)
+   Clean, Modern, Simple, Minimalist Full Stack Dev Theme
+   ===================================================== */
+.da-signature-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 22px 0 10px 0;
+    width: 100%;
+}
+
+.da-signature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.72rem;
+    color: #71717a;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
+    user-select: none;
+    text-decoration: none;
+}
+
+.da-signature-badge:hover {
+    transform: translateY(-1px);
+    border-color: #d4d4d8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    color: #27272a;
+}
+
+.da-icon-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f4f4f5;
+    color: #18181b;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.da-signature-badge:hover .da-icon-code {
+    background: #18181b;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.da-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.da-muted {
+    color: #a1a1aa;
+    font-weight: 400;
+}
+
+.da-name {
+    color: #18181b;
+    font-weight: 600;
+}
+
+.da-badge-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #f4f4f5;
+    color: #52525b;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border: 1px solid #e4e4e7;
+    transition: all 0.2s ease;
+}
+
+.da-signature-badge:hover .da-badge-role {
+    background: #18181b;
+    color: #ffffff;
+    border-color: #18181b;
+}
+
+/* Dark theme / Modern Dark mode */
+.dark-theme .da-signature-badge,
+[data-theme="dark"] .da-signature-badge {
+    background: #121217;
+    border-color: #27272a;
+    color: #a1a1aa;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .da-signature-badge:hover,
+[data-theme="dark"] .da-signature-badge:hover {
+    border-color: #3f3f46;
+    background: #18181f;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.dark-theme .da-icon-code,
+[data-theme="dark"] .da-icon-code {
+    background: #1e1e26;
+    color: #e4e4e7;
+}
+
+.dark-theme .da-signature-badge:hover .da-icon-code,
+[data-theme="dark"] .da-signature-badge:hover .da-icon-code {
+    background: #ffffff;
+    color: #09090b;
+}
+
+.dark-theme .da-name,
+[data-theme="dark"] .da-name {
+    color: #ffffff;
+}
+
+.dark-theme .da-badge-role,
+[data-theme="dark"] .da-badge-role {
+    background: #1c1c24;
+    border-color: #2e2e38;
+    color: #a1a1aa;
+}
+
+.dark-theme .da-signature-badge:hover .da-badge-role,
+[data-theme="dark"] .da-signature-badge:hover .da-badge-role {
+    background: #ffffff;
+    color: #09090b;
+    border-color: #ffffff;
+}

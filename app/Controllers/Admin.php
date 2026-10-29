@@ -1080,21 +1080,12 @@ class Admin extends BaseController
             $branchId = (int) $branchId;
         }
         
-        $orders = $orderModel->getAllOrders($startDate, $endDate, $branchId);
-        
-        // Calculate Stats based on the QUERY result (filtered or all)
-        $totalRevenue = 0;
-        $totalOrders = count($orders);
-        $totalSuccess = 0;
-        
-        foreach ($orders as $order) {
-            if ($order['status'] !== 'cancelled') {
-                $totalRevenue += $order['total_amount'];
-                if ($order['status'] === 'completed') {
-                    $totalSuccess++;
-                }
-            }
-        }
+        // Calculate Stats across all matching orders for the chosen filter
+        $stats = $orderModel->getOrderStats($startDate, $endDate, $branchId);
+
+        // Fetch paginated orders (20 orders per page)
+        $perPage = 20;
+        $orders  = $orderModel->getPaginatedOrders($perPage, $startDate, $endDate, $branchId);
         
         $savedCustomerModel = new \App\Models\SavedCustomerModel();
         $upcomingBirthdays  = $savedCustomerModel->getUpcomingBirthdays(14);
@@ -1103,15 +1094,13 @@ class Admin extends BaseController
         $data = [
             'title'             => 'Daftar Pesanan',
             'orders'            => $orders,
+            'pager'             => $orderModel->pager,
             'startDate'         => $startDate,
             'endDate'           => $endDate,
+            'branchId'          => $branchId,
             'upcomingBirthdays' => $upcomingBirthdays,
             'todayBirthdays'    => $todayBirthdays,
-            'stats'             => [
-                'revenue' => $totalRevenue,
-                'total'   => $totalOrders,
-                'success' => $totalSuccess
-            ]
+            'stats'             => $stats
         ];
 
         return view('admin/orders/index', $data);

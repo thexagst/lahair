@@ -226,6 +226,20 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <?php if (!empty($pager) && $pager->getTotal('orders') > 0): ?>
+            <div class="pagination-wrapper" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div class="pagination-info">
+                    Menampilkan <?= ($pager->getCurrentPage('orders') - 1) * $pager->getPerPage('orders') + 1 ?> - 
+                    <?= min($pager->getCurrentPage('orders') * $pager->getPerPage('orders'), $pager->getTotal('orders')) ?> 
+                    dari <strong><?= number_format($pager->getTotal('orders'), 0, ',', '.') ?></strong> pesanan
+                </div>
+                <?php if ($pager->getPageCount('orders') > 1): ?>
+                    <?= $pager->links('orders', 'default') ?>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 

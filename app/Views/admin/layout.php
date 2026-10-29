@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="La Hair" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+    <meta name="author" content="Duma Augusto">
+    <meta name="designer" content="Duma Augusto - Full Stack Developer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -108,6 +110,23 @@
             <?php endif; ?>
         </nav>
 
+        <!-- Creator & Developer Attribution -->
+        <div class="sidebar-creator-badge" title="Engineered by Duma Augusto — Full Stack Developer">
+            <div class="scb-profile">
+                <div class="scb-avatar">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </div>
+                <div class="scb-info">
+                    <span class="scb-name">Duma Augusto</span>
+                    <span class="scb-role">Full Stack Developer</span>
+                </div>
+                <span class="scb-status-dot" title="Active"></span>
+            </div>
+        </div>
+
         <div class="sidebar-footer">
             <a href="/" target="_blank" class="footer-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,6 +214,19 @@
         <main class="admin-container" id="main-content">
             <?= $this->renderSection('content') ?>
         </main>
+
+        <!-- Admin Main Footer -->
+        <footer class="admin-main-footer">
+            <div class="admin-footer-left">
+                &copy; <?= date('Y') ?> <strong>La Hair Studio</strong> Management System
+            </div>
+            <div class="admin-footer-right">
+                <div class="admin-footer-credit">
+                    <span class="admin-footer-badge">DEVELOPER</span>
+                    <span>Crafted by <strong>Duma Augusto</strong> &bull; Full Stack Developer</span>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- External Assets -->

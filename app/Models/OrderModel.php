@@ -121,8 +121,74 @@ class OrderModel extends Model
     }
 
     /**
-     * Get all orders for admin
+     * Get paginated orders for admin
      */
+    public function getPaginatedOrders(int $perPage = 20, $startDate = null, $endDate = null, $branchId = null): array
+    {
+        $builder = $this->select('orders.*, admins.username as worker_name, branches.name as branch_name')
+                        ->join('admins', 'admins.id = orders.worker_id', 'left')
+                        ->join('branches', 'branches.id = orders.branch_id', 'left')
+                        ->orderBy('orders.created_at', 'DESC');
+        
+        if ($startDate && $endDate) {
+            $builder->where('orders.created_at >=', $startDate . ' 00:00:00');
+            $builder->where('orders.created_at <=', $endDate . ' 23:59:59');
+        }
+
+        if ($branchId) {
+            $builder->where('orders.branch_id', $branchId);
+        }
+        
+        $orders = $builder->paginate($perPage, 'orders');
+
+        if (!empty($orders)) {
+            $orderIds = array_column($orders, 'id');
+            $orderWorkerModel = new \App\Models\OrderWorkerModel();
+            $workersByOrder = $orderWorkerModel->getWorkersForOrders($orderIds);
+
+            foreach ($orders as &$ord) {
+                $assigned = $workersByOrder[$ord['id']] ?? [];
+                if (empty($assigned) && !empty($ord['worker_name'])) {
+                    $assigned = [['id' => $ord['worker_id'] ?? 0, 'username' => $ord['worker_name']]];
+                }
+                $ord['workers'] = $assigned;
+                $ord['worker_names'] = !empty($assigned) ? implode(', ', array_column($assigned, 'username')) : ($ord['worker_name'] ?? null);
+            }
+        }
+
+        return $orders;
+    }
+
+    /**
+     * Get summary stats across all matching orders
+     */
+    public function getOrderStats($startDate = null, $endDate = null, $branchId = null): array
+    {
+        $builder = $this->db->table($this->table)
+                            ->select('
+                                COUNT(id) as total,
+                                SUM(CASE WHEN status != "cancelled" THEN total_amount ELSE 0 END) as revenue,
+                                SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as success
+                            ');
+
+        if ($startDate && $endDate) {
+            $builder->where('created_at >=', $startDate . ' 00:00:00');
+            $builder->where('created_at <=', $endDate . ' 23:59:59');
+        }
+
+        if ($branchId) {
+            $builder->where('branch_id', $branchId);
+        }
+
+        $row = $builder->get()->getRowArray();
+
+        return [
+            'revenue' => (float)($row['revenue'] ?? 0),
+            'total'   => (int)($row['total'] ?? 0),
+            'success' => (int)($row['success'] ?? 0),
+        ];
+    }
+
     public function getAllOrders($startDate = null, $endDate = null, $branchId = null): array
     {
         $builder = $this->select('orders.*, admins.username as worker_name, branches.name as branch_name')

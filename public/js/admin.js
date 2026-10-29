@@ -71,3 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+// ===== CREATOR & DEVELOPER SIGNATURE =====
+console.log(
+    '%c ⚡ Crafted with precision %c Duma Augusto %c Full Stack Developer ',
+    'background: #18181b; color: #a1a1aa; padding: 5px 9px; border-radius: 4px 0 0 4px; font-size: 11px; font-weight: 500; font-family: monospace;',
+    'background: #09090b; color: #ffffff; padding: 5px 9px; font-size: 11px; font-weight: 700; border-top: 1px solid #27272a; border-bottom: 1px solid #27272a; font-family: monospace;',
+    'background: #27272a; color: #22c55e; padding: 5px 9px; border-radius: 0 4px 4px 0; font-size: 11px; font-weight: 600; font-family: monospace;'
+);

@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="La Hair" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+    <meta name="author" content="Duma Augusto">
+    <meta name="designer" content="Duma Augusto - Full Stack Developer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -203,6 +205,11 @@
 
             <button type="submit" class="btn-login">Masuk Sekarang</button>
         </form>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 0.73rem; color: var(--text-muted);">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);"></span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg><span>Crafted by <strong style="color: #ffffff; font-weight: 600;">Duma Augusto</strong> &bull; Full Stack Developer</span>
+        </div>
     </div>
 
 </body>

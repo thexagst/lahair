@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Duma Augusto">
+    <meta name="designer" content="Duma Augusto - Full Stack Developer">
     <meta name="description" content="Pesanan Berhasil - La Hair Studio">
     <title>Pesanan Berhasil - La Hair Studio</title>
     
@@ -234,6 +236,8 @@
                 <span>Powered by <a href="/">La Hair Studio</a></span>
             </div>
             <p>© <?= date('Y') ?> La Hair Studio. All rights reserved.</p>
+
+            <?= $this->include('partials/watermark') ?>
         </footer>
         
     </main>
