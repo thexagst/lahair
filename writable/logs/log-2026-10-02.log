@@ -1,0 +1,33 @@
+ERROR - 2026-10-02 17:51:50 --> mysqli_sql_exception: Cannot truncate a table referenced in a foreign key constraint (`lahair`.`product_item_addons`, CONSTRAINT `product_item_addons_product_item_id_foreign` FOREIGN KEY (`product_item_id`) REFERENCES `lahair`.`product_items` (`id`)) in D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('TRUNCATE `produ...', 0)
+#1 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('TRUNCATE `produ...')
+#2 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('TRUNCATE `produ...')
+#3 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2773): CodeIgniter\Database\BaseConnection->query('TRUNCATE `produ...', NULL, false)
+#4 D:\xampp\htdocs\lahair\app\Database\Seeds\MenuMigrationSeeder.php(17): CodeIgniter\Database\BaseBuilder->truncate()
+#5 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\Seeder.php(149): App\Database\Seeds\MenuMigrationSeeder->run()
+#6 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#8 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#9 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#10 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#11 D:\xampp\htdocs\lahair\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#12 {main}
+ERROR - 2026-10-02 17:52:14 --> mysqli_sql_exception: Unknown column 'track_stock' in 'field list' in D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `pr...', 0)
+#1 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `pr...')
+#2 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `pr...')
+#3 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `pr...', Array, false)
+#4 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\BaseModel.php(838): CodeIgniter\Model->doInsert(Array)
+#6 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Model.php(797): CodeIgniter\BaseModel->insert(Array, true)
+#7 D:\xampp\htdocs\lahair\app\Database\Seeds\MenuMigrationSeeder.php(36): CodeIgniter\Model->insert(Array)
+#8 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\Seeder.php(149): App\Database\Seeds\MenuMigrationSeeder->run()
+#9 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#10 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#11 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#12 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#13 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 D:\xampp\htdocs\lahair\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}

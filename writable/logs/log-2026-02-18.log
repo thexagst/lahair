@@ -1,0 +1,4 @@
+CRITICAL - 2026-02-18 14:46:34 --> ErrorException: Cannot declare class App\Database\Migrations\DropReviewsTable, because the name is already in use
+[Method: CLI, Route: migrate]
+in APPPATH\Database\Migrations\2026-02-18-074609_DropReviewsTable.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

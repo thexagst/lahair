@@ -1,0 +1,47 @@
+ERROR - 2026-10-09 22:59:32 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'lahair', 3306, '', 0)
+#1 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#5 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MigrationRunner.php(766): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MigrationRunner.php(644): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+#8 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run(Array)
+#9 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', Array)
+#10 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 D:\xampp\htdocs\lahair\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#4 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MigrationRunner.php(766): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Database\MigrationRunner.php(644): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+#7 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run(Array)
+#8 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', Array)
+#9 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#10 D:\xampp\htdocs\lahair\vendor\codeigniter4\framework\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#11 D:\xampp\htdocs\lahair\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-10-09 22:59:32 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: CLI, Route: migrate:status]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FROM `lahair`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+ 4 SYSTEMPATH\Database\MigrationRunner.php(766): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+ 5 SYSTEMPATH\Database\MigrationRunner.php(644): CodeIgniter\Database\MigrationRunner->ensureTable()
+ 6 SYSTEMPATH\Commands\Database\MigrateStatus.php(115): CodeIgniter\Database\MigrationRunner->getHistory('')
+ 7 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateStatus->run([])
+ 8 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:status', [])
+ 9 SYSTEMPATH\Boot.php(388): CodeIgniter\CLI\Console->run()
+10 SYSTEMPATH\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+11 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))

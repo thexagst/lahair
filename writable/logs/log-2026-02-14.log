@@ -1,0 +1,330 @@
+CRITICAL - 2026-02-14 15:40:51 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 61.
+ 1 APPPATH\Views\lynk\mobile_app.php(61): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 61)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 15:42:07 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 61.
+ 1 APPPATH\Views\lynk\mobile_app.php(61): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 61)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 15:42:07 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 61.
+ 1 APPPATH\Views\lynk\mobile_app.php(61): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 61)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 15:42:08 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 61.
+ 1 APPPATH\Views\lynk\mobile_app.php(61): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 61)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:36 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:37 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:37 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:38 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:38 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 16:59:38 --> ErrorException: Undefined variable $products
+[Method: GET, Route: /]
+in APPPATH\Views\lynk\mobile_app.php on line 55.
+ 1 APPPATH\Views\lynk\mobile_app.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php', 55)
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\lynk\\mobile_app.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('lynk/mobile_app', [], true)
+ 5 APPPATH\Controllers\Home.php(26): view('lynk/mobile_app', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:14:44 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:14:50 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:14:56 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:06 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:07 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:07 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:12 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:13 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:13 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:39 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:15:40 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(866): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
+CRITICAL - 2026-02-14 20:16:27 --> CodeIgniter\Exceptions\RuntimeException: View themes, no current section.
+[Method: GET, Route: admin/orders/view/LHS260200004]
+in SYSTEMPATH\View\View.php on line 430.
+ 1 APPPATH\Views\admin\orders\view.php(428): CodeIgniter\View\View->endSection()
+ 2 SYSTEMPATH\View\View.php(226): include('D:\\xampp\\htdocs\\lahair\\app\\Views\\admin\\orders\\view.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1199): CodeIgniter\View\View->render('admin/orders/view', [], true)
+ 5 APPPATH\Controllers\Admin.php(1038): view('admin/orders/view', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin->viewOrder('LHS260200004')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\lahair\\public\\index.php')
