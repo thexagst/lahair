@@ -2200,27 +2200,27 @@ class Admin extends BaseController
      */
     public function inventory()
     {
-        $this->ensureSuperAdmin();
         $inventoryModel = new \App\Models\InventoryModel();
         $branchModel    = new \App\Models\BranchModel();
         $branches       = $branchModel->getActiveBranches();
 
-        $selectedBranchId = $this->request->getGet('branch_id');
-        if ($selectedBranchId === null || $selectedBranchId === '') {
-            $selectedBranchId = $this->getActiveBranchId();
-        } else if ($selectedBranchId === 'all') {
-            $selectedBranchId = null;
-        } else {
-            $selectedBranchId = (int) $selectedBranchId;
+        $activeBranchId = $this->getActiveBranchId() ?? 1;
+        $activeBranch   = null;
+        foreach ($branches as $b) {
+            if ($b['id'] == $activeBranchId) {
+                $activeBranch = $b;
+                break;
+            }
         }
 
-        $inventories = $inventoryModel->getWithBranchStocks($selectedBranchId);
+        $inventories = $inventoryModel->getWithBranchStocks($activeBranchId);
         
         $data = [
-            'title'            => 'Gudang Stok',
-            'branches'         => $branches,
-            'selectedBranchId' => $selectedBranchId,
-            'inventories'      => $inventories,
+            'title'          => 'Gudang Stok',
+            'branches'       => $branches,
+            'activeBranchId' => $activeBranchId,
+            'activeBranch'   => $activeBranch,
+            'inventories'    => $inventories,
         ];
         
         return view('admin/inventory/index', $data);
@@ -2231,8 +2231,6 @@ class Admin extends BaseController
      */
     public function inventoryHistory($id)
     {
-        $this->ensureSuperAdmin();
-
         $inventoryModel = new \App\Models\InventoryModel();
         $inventory = $inventoryModel->find($id);
 
@@ -2280,16 +2278,18 @@ class Admin extends BaseController
      */
     public function storeInventory()
     {
-        $this->ensureSuperAdmin();
         $inventoryModel      = new \App\Models\InventoryModel();
         $inventoryStockModel = new \App\Models\InventoryStockModel();
         $branchModel         = new \App\Models\BranchModel();
         $branches            = $branchModel->getActiveBranches();
         
+        $activeBranchId = $this->getActiveBranchId() ?? 1;
         $unitValue = $this->request->getPost('unit_value');
+        $stockInput = (float)($this->request->getPost('stock') ?? 0);
+
         $data = [
             'name'       => $this->request->getPost('name'),
-            'stock'      => 0,
+            'stock'      => $stockInput,
             'unit'       => $this->request->getPost('unit'),
             'sub_unit'   => $this->request->getPost('sub_unit') ?? $this->request->getPost('unit'),
             'unit_value' => ($unitValue !== null && $unitValue !== '') ? (float)$unitValue : null,
@@ -2297,17 +2297,22 @@ class Admin extends BaseController
         
         $inventoryId = $inventoryModel->insert($data);
         if ($inventoryId) {
-            $totalStock = 0;
+            // Set stock for the active branch
+            $inventoryStockModel->setStock($inventoryId, $activeBranchId, $stockInput);
+            
+            // Ensure record exists for other branches with 0 or individual post if supplied
             foreach ($branches as $branch) {
-                // Check if specific branch stock posted, e.g. stock_1, stock_2 or default to single 'stock' input
-                $branchStockInput = $this->request->getPost('stock_' . $branch['id']);
-                if ($branchStockInput === null && $branch['code'] === 'semarang') {
-                    $branchStockInput = $this->request->getPost('stock'); // fallback to general stock field for primary branch
+                if ($branch['id'] != $activeBranchId) {
+                    $bStock = $this->request->getPost('stock_' . $branch['id']);
+                    $val = ($bStock !== null) ? (float)$bStock : 0.00;
+                    $inventoryStockModel->setStock($inventoryId, $branch['id'], $val);
                 }
-                $bStock = (float)($branchStockInput ?? 0);
-                $inventoryStockModel->setStock($inventoryId, $branch['id'], $bStock);
-                $totalStock += $bStock;
             }
+
+            // Recalculate total stock from all branches
+            $db = \Config\Database::connect();
+            $sum = $db->table('inventory_stocks')->where('inventory_id', $inventoryId)->selectSum('stock')->get()->getRow();
+            $totalStock = $sum ? (float)$sum->stock : $stockInput;
             $inventoryModel->update($inventoryId, ['stock' => $totalStock]);
         }
 
@@ -2319,7 +2324,6 @@ class Admin extends BaseController
      */
     public function updateInventory($id)
     {
-        $this->ensureSuperAdmin();
         $inventoryModel      = new \App\Models\InventoryModel();
         $inventoryStockModel = new \App\Models\InventoryStockModel();
         $branchModel         = new \App\Models\BranchModel();
@@ -2343,9 +2347,12 @@ class Admin extends BaseController
 
         // Branch specific stock update
         $branchId = $this->request->getPost('branch_id');
-        $branchStock = $this->request->getPost('branch_stock');
+        if (!$branchId) {
+            $branchId = $this->getActiveBranchId() ?? 1;
+        }
+        $branchStock = $this->request->getPost('branch_stock') ?? $this->request->getPost('stock');
 
-        if ($branchId !== null && $branchStock !== null) {
+        if ($branchStock !== null) {
             $inventoryStockModel->setStock((int)$id, (int)$branchId, (float)$branchStock);
         } else {
             // Check individual branch fields (stock_1, stock_2, etc.)
@@ -2367,9 +2374,10 @@ class Admin extends BaseController
 
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'success'     => true,
-                'message'     => 'Stok berhasil diupdate',
-                'total_stock' => $totalStock,
+                'success'      => true,
+                'message'      => 'Stok berhasil diupdate',
+                'branch_stock' => $branchStock,
+                'total_stock'  => $totalStock,
             ]);
         }
 
@@ -2395,7 +2403,6 @@ class Admin extends BaseController
      */
     public function importInventory()
     {
-        $this->ensureSuperAdmin();
         $file = $this->request->getFile('csv_file');
         
         if (!$file || !$file->isValid()) {
@@ -2412,10 +2419,9 @@ class Admin extends BaseController
         $countInsert = 0;
         $countUpdate = 0;
         
-        $inventoryModel = new \App\Models\InventoryModel();
-        
-        // Sometimes Excel exports use ';' as separator. Let's try to detect it.
-        // But for simplicity, we assume standard CSV with proper delimitation handle by fgetcsv.
+        $inventoryModel      = new \App\Models\InventoryModel();
+        $inventoryStockModel = new \App\Models\InventoryStockModel();
+        $activeBranchId      = $this->getActiveBranchId() ?? 1;
         
         while (($row = fgetcsv($handle)) !== FALSE) {
             // Count might be 1 if it's a single string separated by semicolons due to wrong format
@@ -2433,7 +2439,7 @@ class Admin extends BaseController
             $stockClean = preg_replace('/[^0-9\-\.]/', '', str_replace(',', '.', $stockRaw));
             $stock = (float) $stockClean;
             
-            $unit = isset($row[3]) && trim($row[3]) !== '' ? trim($row[3]) : 'botol';
+            $unit = isset($row[3]) && trim($row[3]) !== '' ? trim($row[3]) : 'pcs';
             $sub_unit = isset($row[4]) && trim($row[4]) !== '' ? trim($row[4]) : 'ml';
             
             $unitValueRaw = isset($row[5]) ? $row[5] : '';
@@ -2454,13 +2460,16 @@ class Admin extends BaseController
                 $existingItem = $inventoryModel->find($id);
                 if ($existingItem) {
                     $inventoryModel->update($id, $data);
+                    $inventoryStockModel->setStock((int)$id, (int)$activeBranchId, $stock);
                     $countUpdate++;
                 } else {
-                    $inventoryModel->insert($data);
+                    $newId = $inventoryModel->insert($data);
+                    $inventoryStockModel->setStock((int)$newId, (int)$activeBranchId, $stock);
                     $countInsert++;
                 }
             } else {
-                $inventoryModel->insert($data);
+                $newId = $inventoryModel->insert($data);
+                $inventoryStockModel->setStock((int)$newId, (int)$activeBranchId, $stock);
                 $countInsert++;
             }
         }
@@ -2475,7 +2484,6 @@ class Admin extends BaseController
      */
     public function downloadInventoryTemplate()
     {
-        $this->ensureSuperAdmin();
         $inventoryModel = new \App\Models\InventoryModel();
         
         $items = $inventoryModel->findAll();

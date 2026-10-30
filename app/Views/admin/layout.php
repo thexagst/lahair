@@ -35,7 +35,7 @@
             </a>
         </div>
 
-        <div style="padding: 0 16px 14px 16px;">
+        <div style="padding: 0 16px 14px 16px; flex-shrink: 0;">
             <a href="/admin/select-branch" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 69, 19, 0.2); border-radius: 8px; text-decoration: none; color: #2c2c2c; font-size: 0.78rem; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s;" title="Ganti cabang kerja">
                 <span style="display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -74,6 +74,16 @@
             </div>
 
 
+            <div class="nav-section">
+                <div class="nav-section-title">Inventaris</div>
+                <a href="/admin/inventory" class="nav-item <?= strpos(current_url(), '/inventory') !== false ? 'active' : '' ?>">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    Stok Bahan
+                </a>
+            </div>
+
             <?php if (session()->get('role') !== 'worker') : ?>
             <div class="nav-section">
                 <div class="nav-section-title">Laporan</div>
@@ -82,12 +92,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     Laporan Keuangan
-                </a>
-                <a href="/admin/inventory" class="nav-item <?= strpos(current_url(), '/inventory') !== false ? 'active' : '' ?>">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                    </svg>
-                    Stok Bahan
                 </a>
             </div>
             
@@ -158,12 +162,22 @@
                 <!-- Branch Selector Dropdown Switcher -->
                 <?php
                     $activeBName = session()->get('active_branch_name') ?? 'Semua Cabang';
+                    $rawBCode    = session()->get('active_branch_code') ?? '';
                     $activeBId   = session()->get('active_branch_id');
+
+                    $branchCodeBadge = match(strtolower($rawBCode)) {
+                        'semarang'  => 'SMG',
+                        'indramayu' => 'IDM',
+                        default     => (!empty($rawBCode) && $rawBCode !== 'all') ? strtoupper(substr($rawBCode, 0, 3)) : ''
+                    };
                 ?>
                 <div class="branch-switcher-container" style="position: relative;">
                     <button type="button" id="branchDropdownBtn" onclick="toggleBranchMenu(event)" style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); box-shadow: var(--shadow); transition: all 0.2s;">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         <span>Cabang: <strong style="color: var(--primary);"><?= esc($activeBName) ?></strong></span>
+                        <?php if (!empty($branchCodeBadge)): ?>
+                            <span style="background: var(--primary-light); color: var(--primary); font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(139, 69, 19, 0.2); letter-spacing: 0.04em;"><?= esc($branchCodeBadge) ?></span>
+                        <?php endif; ?>
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--text-muted);"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     

@@ -6,15 +6,15 @@
     <div>
         <h1 class="page-title"><?= esc($title) ?></h1>
         <p style="font-size: 0.85rem; color: #6b7280; margin: 4px 0 0 0;">
-            Kelola stok bahan baku dan produk terpisah untuk cabang Semarang dan Indramayu.
+            Kelola dan pantau ketersediaan stok bahan baku serta produk.
         </p>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
-        <button onclick="document.getElementById('importModal').style.display='flex'" class="btn btn-secondary">
+        <button type="button" onclick="document.getElementById('importModal').style.display='flex'" class="btn btn-secondary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: text-bottom;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
             Import Excel/CSV
         </button>
-        <button onclick="openModal('create')" class="btn btn-primary">
+        <button type="button" onclick="openModal('create')" class="btn btn-primary">
             <span>+</span> Tambah Stok
         </button>
     </div>
@@ -41,30 +41,6 @@
         max-width: 520px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    .branch-pill {
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        text-decoration: none;
-        background: #f3f4f6;
-        color: #4b5563;
-        border: 1px solid #e5e7eb;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: all 0.15s;
-    }
-    .branch-pill:hover {
-        background: #e5e7eb;
-        color: #111827;
-    }
-    .branch-pill.active {
-        background: var(--primary, #8B4513);
-        color: #ffffff;
-        border-color: var(--primary, #8B4513);
-        box-shadow: 0 2px 6px rgba(139, 69, 19, 0.25);
-    }
     /* Spreadsheet-style table */
     #inventoryTable {
         width: 100%;
@@ -75,7 +51,7 @@
     #inventoryTable th,
     #inventoryTable td {
         border: 1px solid #d1d5db;
-        padding: 4px 8px;
+        padding: 6px 10px;
         white-space: nowrap;
         vertical-align: middle;
         line-height: 1.4;
@@ -124,9 +100,7 @@
         padding: 2px 4px;
         font-size: 0.8rem;
         background: #fff;
-        outline: none;
     }
-    /* Scrollable container */
     .sheet-container {
         max-height: 70vh;
         overflow-y: auto;
@@ -134,14 +108,14 @@
         border-radius: 6px;
     }
     #inventoryTable .col-no   { width: 40px;  text-align: center; color: #9ca3af; }
-    #inventoryTable .col-name { min-width: 180px; }
+    #inventoryTable .col-name { min-width: 200px; }
     #inventoryTable .col-uom  { width: 90px; }
     #inventoryTable .col-qty  { width: 110px; text-align: right; }
-    #inventoryTable .col-sat  { width: 70px; }
-    #inventoryTable .col-val  { width: 120px; color: #374151; }
+    #inventoryTable .col-sat  { width: 80px; }
+    #inventoryTable .col-val  { width: 130px; color: #374151; }
     #inventoryTable .col-date { width: 130px; color: #6b7280; font-size: 0.75rem; }
     #inventoryTable .col-act  { width: 85px;  text-align: center; }
-    #inventoryTable td.col-qty span { font-weight: 600; }
+    #inventoryTable td.col-qty span { font-weight: 700; }
     .btn-act-history {
         background: none;
         border: none;
@@ -155,15 +129,6 @@
     }
     .btn-act-history:hover {
         background: #dbeafe;
-    }
-    .badge-branch {
-        display: inline-block;
-        padding: 2px 6px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        border-radius: 4px;
-        background: #e0f2fe;
-        color: #0369a1;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -180,33 +145,15 @@
     </div>
 <?php endif; ?>
 
-<!-- Branch Filter Pills -->
-<div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap;">
-    <span style="font-size: 0.82rem; font-weight: 600; color: #6b7280; margin-right: 4px;">Pilih Tampilan:</span>
-    <a href="/admin/inventory" class="branch-pill <?= empty($selectedBranchId) ? 'active' : '' ?>">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span>Semua Cabang (Konsolidasi)</span>
-    </a>
-    <?php if (!empty($branches)): foreach ($branches as $b): ?>
-        <a href="/admin/inventory?branch_id=<?= $b['id'] ?>" class="branch-pill <?= ($selectedBranchId == $b['id']) ? 'active' : '' ?>">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Cabang <?= esc($b['name']) ?></span>
-        </a>
-    <?php endforeach; endif; ?>
-</div>
-
 <div class="card" style="padding: 0; overflow: hidden;">
     <?php if (empty($inventories)): ?>
         <div class="empty-state" style="padding: 40px;">
             <h3>Belum ada data stok</h3>
-            <p>Tambahkan data bahan baku atau produk fisik untuk cabang Semarang & Indramayu</p>
+            <p>Tambahkan data bahan baku atau produk fisik untuk gudang.</p>
         </div>
     <?php else: ?>
         <div style="padding: 8px 16px 6px; font-size: 0.75rem; color: #6b7280; border-bottom: 1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
             <span>Klik sel angka stok untuk edit langsung · <?= count($inventories) ?> item bahan</span>
-            <span style="font-weight: 600; color: #374151;">
-                <?= empty($selectedBranchId) ? 'Menampilkan Stok Semarang & Indramayu' : 'Filter: Cabang Aktif' ?>
-            </span>
         </div>
         <div class="sheet-container">
             <table id="inventoryTable">
@@ -215,23 +162,7 @@
                         <th class="col-no">#</th>
                         <th class="col-name">Nama Stok</th>
                         <th class="col-uom">Kemasan</th>
-                        
-                        <?php if (empty($selectedBranchId)): ?>
-                            <!-- Mode Semua Cabang: Tampilkan Semarang & Indramayu terpisah -->
-                            <th class="col-qty" style="background:#f1f5f9; color:#1e293b; font-weight:700;">Semarang</th>
-                            <th class="col-qty" style="background:#f1f5f9; color:#1e293b; font-weight:700;">Indramayu</th>
-                            <th class="col-qty" style="background:#f8fafc; color:#475569;">Total Stok</th>
-                        <?php else: ?>
-                            <!-- Mode Single Cabang -->
-                            <?php 
-                            $activeBranchName = 'Cabang';
-                            foreach ($branches as $b) {
-                                if ($b['id'] == $selectedBranchId) $activeBranchName = $b['name'];
-                            }
-                            ?>
-                            <th class="col-qty" style="background:#f1f5f9; color:#1e293b; font-weight:700;">Stok <?= esc($activeBranchName) ?></th>
-                        <?php endif; ?>
-
+                        <th class="col-qty" style="background:#f1f5f9; color:#1e293b; font-weight:700;">Stok</th>
                         <th class="col-sat">Satuan Isi</th>
                         <th class="col-val" title="Isi per kemasan, misal 1 botol = 300 ml">Isi / Kemasan</th>
                         <th class="col-date">Terakhir Update</th>
@@ -240,32 +171,16 @@
                 </thead>
                 <tbody>
                     <?php 
-                    // Pre-find branch IDs for Semarang and Indramayu
-                    $smgId = 1;
-                    $idmId = 2;
-                    if (!empty($branches)) {
-                        foreach ($branches as $b) {
-                            if ($b['code'] === 'semarang') $smgId = $b['id'];
-                            if ($b['code'] === 'indramayu') $idmId = $b['id'];
-                        }
-                    }
-
                     $no = 1; 
                     foreach ($inventories as $item): 
-                        $bStocks = $item['branch_stocks'] ?? [];
-                        $stockSmg = (float)($bStocks[$smgId] ?? 0);
-                        $stockIdm = (float)($bStocks[$idmId] ?? 0);
-                        $totalStock = (float)($item['stock'] ?? ($stockSmg + $stockIdm));
+                        $curStock = (float)($item['current_branch_stock'] ?? $item['stock'] ?? 0);
                     ?>
                         <tr data-id="<?= $item['id'] ?>" 
                             data-name="<?= esc($item['name']) ?>" 
                             data-unit="<?= esc($item['unit']) ?>" 
                             data-sub_unit="<?= esc($item['sub_unit'] ?? '') ?>" 
                             data-unit_value="<?= $item['unit_value'] ?? '' ?>"
-                            data-stock-smg="<?= $stockSmg ?>"
-                            data-stock-idm="<?= $stockIdm ?>"
-                            data-stock-total="<?= $totalStock ?>"
-                            data-stock-current="<?= (float)($item['current_branch_stock'] ?? 0) ?>">
+                            data-stock="<?= $curStock ?>">
                             
                             <td class="col-no"><?= $no++ ?></td>
                             <td class="col-name">
@@ -274,43 +189,14 @@
                             <td class="col-uom">
                                 <span class="editable-cell" onclick="editCell(this, 'unit')" title="Klik edit"><?= esc($item['unit']) ?></span>
                             </td>
-
-                            <?php if (empty($selectedBranchId)): ?>
-                                <!-- Kolom Stok Semarang -->
-                                <td class="col-qty" style="background: rgba(224, 242, 254, 0.25);">
-                                    <span class="editable-cell" 
-                                          onclick="editBranchStockCell(this, <?= $smgId ?>, 'stock-smg', 'Semarang')" 
-                                          title="Klik edit stok Semarang" 
-                                          style="color:#0284c7; font-weight:700;">
-                                        <?= number_format($stockSmg, ($stockSmg == floor($stockSmg) ? 0 : 2), ',', '.') ?>
-                                    </span>
-                                </td>
-                                <!-- Kolom Stok Indramayu -->
-                                <td class="col-qty" style="background: rgba(254, 243, 199, 0.25);">
-                                    <span class="editable-cell" 
-                                          onclick="editBranchStockCell(this, <?= $idmId ?>, 'stock-idm', 'Indramayu')" 
-                                          title="Klik edit stok Indramayu" 
-                                          style="color:#d97706; font-weight:700;">
-                                        <?= number_format($stockIdm, ($stockIdm == floor($stockIdm) ? 0 : 2), ',', '.') ?>
-                                    </span>
-                                </td>
-                                <!-- Kolom Total Stok -->
-                                <td class="col-qty total-stock-cell" style="color:#374151; font-weight:600;">
-                                    <?= number_format($totalStock, ($totalStock == floor($totalStock) ? 0 : 2), ',', '.') ?>
-                                </td>
-                            <?php else: ?>
-                                <!-- Kolom Single Branch Stok -->
-                                <?php $curStock = (float)($item['current_branch_stock'] ?? 0); ?>
-                                <td class="col-qty">
-                                    <span class="editable-cell" 
-                                          onclick="editBranchStockCell(this, <?= $selectedBranchId ?>, 'stock-current', 'Cabang')" 
-                                          title="Klik edit stok cabang" 
-                                          style="color:#0284c7; font-weight:700;">
-                                        <?= number_format($curStock, ($curStock == floor($curStock) ? 0 : 2), ',', '.') ?>
-                                    </span>
-                                </td>
-                            <?php endif; ?>
-
+                            <td class="col-qty">
+                                <span class="editable-cell" 
+                                      onclick="editStockCell(this)" 
+                                      title="Klik edit stok" 
+                                      style="color:#0284c7; font-weight:700;">
+                                    <?= number_format($curStock, ($curStock == floor($curStock) ? 0 : 2), ',', '.') ?>
+                                </span>
+                            </td>
                             <td class="col-sat">
                                 <span class="editable-cell" onclick="editCell(this, 'sub_unit')" title="Klik edit"><?= esc($item['sub_unit'] ?? '') ?></span>
                             </td>
@@ -329,12 +215,14 @@
                                     <button type="button" class="btn-act-history" onclick="showHistory(<?= $item['id'] ?>, '<?= esc($item['name'], 'js') ?>')" title="Riwayat Pemakaian">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                                     </button>
+                                    <?php if (session()->get('role') !== 'worker'): ?>
                                     <form action="/admin/inventory/delete/<?= $item['id'] ?>" method="post" onsubmit="return confirm('Hapus stok ini?')" style="display:inline; margin:0;">
                                         <?= csrf_field() ?>
                                         <button type="submit" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:3px;line-height:1;border-radius:4px;transition:color 0.15s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#94a3b8'" title="Hapus">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                         </button>
                                     </form>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -355,6 +243,7 @@
         
         <form id="inventoryForm" action="/admin/inventory/store" method="post">
             <?= csrf_field() ?>
+            <input type="hidden" name="branch_id" value="<?= esc($activeBranchId ?? 1) ?>">
             
             <div class="form-group" style="margin-bottom: 14px;">
                 <label class="form-label">Nama Bahan / Produk *</label>
@@ -386,25 +275,9 @@
                 <input type="number" step="any" name="unit_value" id="unit_value" class="form-input" placeholder="Contoh: 1 botol = 1000 ml, isi: 1000">
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
-                <div style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
-                    Jumlah Stok per Cabang:
-                </div>
-                <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <?php if (!empty($branches)): foreach ($branches as $b): ?>
-                        <div class="form-group">
-                            <label class="form-label" style="font-size: 0.78rem;">
-                                Cabang <?= esc($b['name']) ?>
-                            </label>
-                            <input type="number" step="any" min="0" name="stock_<?= $b['id'] ?>" class="form-input" value="0" required>
-                        </div>
-                    <?php endforeach; else: ?>
-                        <div class="form-group">
-                            <label class="form-label">Jumlah Stok</label>
-                            <input type="number" step="any" min="0" name="stock" class="form-input" value="0">
-                        </div>
-                    <?php endif; ?>
-                </div>
+            <div class="form-group" style="margin-bottom: 18px;">
+                <label class="form-label">Jumlah Stok Awal *</label>
+                <input type="number" step="any" min="0" name="stock" id="stock" class="form-input" value="0" required placeholder="0">
             </div>
             
             <div style="display: flex; gap: 10px;">
@@ -465,7 +338,7 @@
                 <thead style="background: #f9fafb; position: sticky; top: 0; z-index: 1;">
                     <tr style="border-bottom: 1px solid #e5e7eb; color: #4b5563; font-weight: 600;">
                         <th style="padding: 10px 12px;">Tanggal</th>
-                        <th style="padding: 10px 12px;">No. Order & Cabang</th>
+                        <th style="padding: 10px 12px;">No. Order</th>
                         <th style="padding: 10px 12px;">Customer</th>
                         <th style="padding: 10px 12px; text-align: right;">Jumlah Dipakai</th>
                     </tr>
@@ -475,8 +348,8 @@
             </table>
         </div>
 
-        <div id="historyEmpty" style="display: none; text-align: center; padding: 35px 20px; color: #9ca3af; font-size: 0.9rem; background: #f9fafb; border-radius: 6px;">
-            Belum ada catatan pemakaian untuk bahan ini.
+        <div id="historyEmpty" style="display: none; text-align: center; padding: 35px 20px; color: #9ca3af; font-size: 0.9rem;">
+            Belum ada riwayat pemakaian untuk bahan ini.
         </div>
 
         <div style="display: flex; justify-content: flex-end; margin-top: 18px; border-top: 1px solid #e5e7eb; padding-top: 12px;">
@@ -486,17 +359,18 @@
 </div>
 
 <script>
-    const CSRF_NAME   = '<?= csrf_token() ?>';
-    const CSRF_HASH   = '<?= csrf_hash() ?>';
-    const UOM_OPTIONS = ['pcs', 'ml', 'gr', 'kg', 'liter', 'botol', 'pack', 'sachet', 'tube', 'kaleng'];
+    const CSRF_NAME        = '<?= csrf_token() ?>';
+    const CSRF_HASH        = '<?= csrf_hash() ?>';
+    const ACTIVE_BRANCH_ID = <?= (int)($activeBranchId ?? 1) ?>;
+    const UOM_OPTIONS      = ['pcs', 'ml', 'gr', 'kg', 'liter', 'botol', 'pack', 'sachet', 'tube', 'kaleng'];
 
-    // ─── Inline Edit for Branch Stock ───────────────────────────────────────────
-    function editBranchStockCell(span, branchId, dataKey, branchName) {
+    // ─── Inline Edit for Stock ────────────────────────────────────────────────────
+    function editStockCell(span) {
         if (span.querySelector('input')) return;
 
         const row = span.closest('tr');
         const id  = row.dataset.id;
-        const rawVal = row.dataset[dataKey.replace('-', '')] || row.getAttribute('data-' + dataKey);
+        const rawVal = row.getAttribute('data-stock') || '0';
 
         const input = document.createElement('input');
         input.className = 'inline-input';
@@ -511,7 +385,7 @@
         input.focus();
         input.select();
 
-        const save = () => saveBranchStock(span, row, branchId, dataKey, input.value.trim(), branchName);
+        const save = () => saveStock(span, row, input.value.trim());
         input.addEventListener('blur', save);
         input.addEventListener('keydown', e => {
             if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
@@ -522,9 +396,9 @@
         });
     }
 
-    async function saveBranchStock(span, row, branchId, dataKey, newValue, branchName) {
+    async function saveStock(span, row, newValue) {
         const id = row.dataset.id;
-        const currentVal = row.getAttribute('data-' + dataKey) || '0';
+        const currentVal = row.getAttribute('data-stock') || '0';
 
         if (newValue === '' || isNaN(newValue)) {
             span.textContent = Number(currentVal).toLocaleString('id-ID');
@@ -540,7 +414,7 @@
 
         const form = new FormData();
         form.append(CSRF_NAME, CSRF_HASH);
-        form.append('branch_id', branchId);
+        form.append('branch_id', ACTIVE_BRANCH_ID);
         form.append('branch_stock', newValue);
 
         try {
@@ -548,14 +422,8 @@
             const result = await res.json();
 
             if (result.success) {
-                row.setAttribute('data-' + dataKey, newValue);
+                row.setAttribute('data-stock', newValue);
                 span.textContent = Number(newValue).toLocaleString('id-ID');
-
-                // Update Total Stock column if present
-                const totalCell = row.querySelector('.total-stock-cell');
-                if (totalCell && result.total_stock !== undefined) {
-                    totalCell.textContent = Number(result.total_stock).toLocaleString('id-ID');
-                }
 
                 // Update timestamp
                 const dateCell = row.querySelector('.date-cell');
@@ -565,7 +433,7 @@
                 }
             } else {
                 span.textContent = Number(currentVal).toLocaleString('id-ID');
-                alert(result.message || 'Gagal menyimpan stok cabang');
+                alert(result.message || 'Gagal menyimpan stok');
             }
         } catch (err) {
             span.textContent = Number(currentVal).toLocaleString('id-ID');
