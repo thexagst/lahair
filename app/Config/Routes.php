@@ -96,6 +96,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('orders/delete-item/(:segment)/(:num)', 'Admin::deleteOrderItem/$1/$2');
     $routes->post('orders/stock-usage/(:segment)', 'Admin::storeStockUsage/$1');
     $routes->post('orders/stock-usage/delete/(:num)', 'Admin::deleteStockUsage/$1');
+    $routes->match(['get', 'post'], 'orders/delete/(:segment)', 'Admin::deleteOrderByNumber/$1');
 
 
 

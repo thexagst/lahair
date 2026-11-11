@@ -54,7 +54,7 @@
 <!-- Import CSV Section -->
 <div class="card" style="padding: 16px; margin-bottom: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h3 style="font-size: 1rem;">Export / Import Excel (CSV)</h3>
+        <h3 style="font-size: 1rem;">Export / Import Excel (CSV & XLSX)</h3>
         <a href="/admin/products/items/<?= $product['id'] ?>/template" style="background: #25D366; color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/><path d="M14 14h-4v4h4v-4z"/></svg>
             Export Data (CSV)
@@ -63,7 +63,7 @@
     <form action="/admin/products/items/<?= $product['id'] ?>/import" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px;">
         <?= csrf_field() ?>
         <div style="flex: 1;">
-            <input type="file" name="csv_file" accept=".csv" required class="form-input" style="padding: 8px;">
+            <input type="file" name="csv_file" accept=".csv,.xlsx" required class="form-input" style="padding: 8px;">
         </div>
         <button type="submit" class="btn btn-secondary">Upload Update</button>
     </form>
@@ -71,9 +71,9 @@
         <strong>Cara Update Massal:</strong>
         <ol style="margin-left: 20px; margin-top: 4px;">
             <li>Klik tombol <strong>Export Data (CSV)</strong> di atas untuk download data saat ini.</li>
-            <li>Edit file di Excel. <strong>JANGAN UBAH KOLOM ID</strong> jika ingin mengupdate data.</li>
-            <li>Jika ingin menambah item baru, <strong>kosongkan kolom ID</strong> pada baris baru.</li>
-            <li>Simpan sebagai CSV dan Upload kembali di sini.</li>
+            <li>Buka dan edit file di Excel (kolom ID boleh dibiarkan atau dikosongkan untuk item baru).</li>
+            <li>Bisa langsung upload file <strong>.CSV</strong> maupun file asli Excel <strong>.XLSX</strong>.</li>
+
         </ol>
     </div>
 </div>

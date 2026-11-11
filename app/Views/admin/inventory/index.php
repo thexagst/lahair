@@ -300,13 +300,13 @@
             <?= csrf_field() ?>
             
             <div style="margin-bottom: 16px; background: var(--bg-body); padding: 16px; border-radius: 8px; border: 1px dashed var(--border);">
-                <p style="margin-top: 0; font-size: 0.9rem; margin-bottom: 8px;">1. Download template CSV ini untuk melihat format.</p>
+                <p style="margin-top: 0; font-size: 0.9rem; margin-bottom: 8px;">1. Download template ini untuk melihat format kolom.</p>
                 <a href="/admin/inventory/template" class="btn btn-secondary btn-sm" style="display: inline-block;">Download Template</a>
             </div>
             
             <div style="margin-bottom: 24px;">
-                <p style="margin-top: 0; font-size: 0.9rem; margin-bottom: 8px;">2. Upload file CSV yang sudah diisi.</p>
-                <input type="file" name="csv_file" accept=".csv" class="form-input" required>
+                <p style="margin-top: 0; font-size: 0.9rem; margin-bottom: 8px;">2. Upload file Excel (.xlsx) atau .csv yang sudah diisi.</p>
+                <input type="file" name="csv_file" accept=".csv,.xlsx" class="form-input" required>
             </div>
             
             <div style="display: flex; gap: 10px;">
@@ -418,7 +418,11 @@
         form.append('branch_stock', newValue);
 
         try {
-            const res = await fetch(`/admin/inventory/update/${id}`, { method: 'POST', body: form });
+            const res = await fetch(`/admin/inventory/update/${id}`, { 
+                method: 'POST', 
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: form 
+            });
             const result = await res.json();
 
             if (result.success) {
@@ -525,7 +529,11 @@
         form.append('unit_value', data.unit_value);
 
         try {
-            const res = await fetch(`/admin/inventory/update/${id}`, { method: 'POST', body: form });
+            const res = await fetch(`/admin/inventory/update/${id}`, { 
+                method: 'POST', 
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: form 
+            });
             if (res.ok || res.redirected) {
                 row.dataset[field] = newValue;
                 if (field === 'unit_value') {

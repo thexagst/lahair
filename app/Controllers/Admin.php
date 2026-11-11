@@ -87,7 +87,7 @@ class Admin extends BaseController
             }
         }
 
-        if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
             return $this->response->setJSON([
                 'success'     => true,
                 'branch_id'   => session()->get('active_branch_id'),
@@ -534,100 +534,243 @@ class Admin extends BaseController
     }
 
     /**
-     * Import items from CSV (Create or Update)
+     * Parse CSV file with auto-delimiter detection and BOM stripping
+     */
+    private function parseCsvRows(string $filePath): array
+    {
+        $handle = @fopen($filePath, 'r');
+        if (!$handle) {
+            return [];
+        }
+
+        // Strip UTF-8 BOM if present
+        $bom = fread($handle, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($handle);
+        }
+
+        // Auto-detect delimiter from first line
+        $pos = ftell($handle);
+        $firstLine = fgets($handle);
+        $delimiter = ',';
+        if ($firstLine !== false) {
+            $semicolonCount = substr_count($firstLine, ';');
+            $commaCount     = substr_count($firstLine, ',');
+            $tabCount       = substr_count($firstLine, "\t");
+
+            if ($semicolonCount > $commaCount && $semicolonCount > $tabCount) {
+                $delimiter = ';';
+            } elseif ($tabCount > $commaCount && $tabCount > $semicolonCount) {
+                $delimiter = "\t";
+            }
+        }
+        fseek($handle, $pos);
+
+        $rows = [];
+        while (($row = fgetcsv($handle, 0, $delimiter)) !== false) {
+            // Fallback: If delimiter mismatch caused entire line to be treated as 1 column
+            if (count($row) === 1 && isset($row[0]) && $row[0] !== '') {
+                if (strpos($row[0], ';') !== false) {
+                    $row = str_getcsv($row[0], ';');
+                } elseif (strpos($row[0], ',') !== false) {
+                    $row = str_getcsv($row[0], ',');
+                } elseif (strpos($row[0], "\t") !== false) {
+                    $row = str_getcsv($row[0], "\t");
+                }
+            }
+            $rows[] = $row;
+        }
+        fclose($handle);
+
+        return $rows;
+    }
+
+    /**
+     * Parse Excel (.xlsx) file using built-in PHP ZipArchive & SimpleXML
+     */
+    private function parseXlsxRows(string $filePath): array
+    {
+        if (!class_exists('\ZipArchive')) {
+            return [];
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($filePath) !== true) {
+            return [];
+        }
+
+        // 1. Shared Strings table
+        $sharedStrings = [];
+        $strContent = $zip->getFromName('xl/sharedStrings.xml');
+        if ($strContent !== false) {
+            $xml = @simplexml_load_string($strContent);
+            if ($xml && isset($xml->si)) {
+                foreach ($xml->si as $si) {
+                    if (isset($si->t)) {
+                        $sharedStrings[] = (string) $si->t;
+                    } elseif (isset($si->r)) {
+                        $text = '';
+                        foreach ($si->r as $r) {
+                            $text .= (string) $r->t;
+                        }
+                        $sharedStrings[] = $text;
+                    } else {
+                        $sharedStrings[] = '';
+                    }
+                }
+            }
+        }
+
+        // 2. Sheet 1 XML
+        $sheetContent = $zip->getFromName('xl/worksheets/sheet1.xml');
+        $zip->close();
+        if ($sheetContent === false) {
+            return [];
+        }
+
+        $xml = @simplexml_load_string($sheetContent);
+        if (!$xml || !isset($xml->sheetData->row)) {
+            return [];
+        }
+
+        $colLetterToIndex = function($col) {
+            $index = 0;
+            $len = strlen($col);
+            for ($i = 0; $i < $len; $i++) {
+                $index = $index * 26 + (ord($col[$i]) - 64);
+            }
+            return $index - 1;
+        };
+
+        $rows = [];
+        foreach ($xml->sheetData->row as $rowNode) {
+            $rowData = [];
+            foreach ($rowNode->c as $cell) {
+                $ref = (string) $cell['r'];
+                preg_match('/^([A-Z]+)/', $ref, $m);
+                $colLetter = $m[1] ?? 'A';
+                $colIndex = $colLetterToIndex($colLetter);
+
+                $type = (string) $cell['t'];
+                $val = isset($cell->v) ? (string) $cell->v : '';
+
+                if ($type === 's' && isset($sharedStrings[(int) $val])) {
+                    $val = $sharedStrings[(int) $val];
+                } elseif ($type === 'inlineStr' && isset($cell->is->t)) {
+                    $val = (string) $cell->is->t;
+                }
+
+                $rowData[$colIndex] = $val;
+            }
+
+            if (!empty($rowData)) {
+                $maxCol = max(array_keys($rowData));
+                $normalizedRow = [];
+                for ($c = 0; $c <= $maxCol; $c++) {
+                    $normalizedRow[$c] = $rowData[$c] ?? '';
+                }
+                $rows[] = $normalizedRow;
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Import items from CSV / XLSX (Create or Update)
      */
     public function importItems($productId)
     {
         $file = $this->request->getFile('csv_file');
         
         if (!$file || !$file->isValid()) {
-            return redirect()->to('/admin/products/items/' . $productId)->with('error', 'File tidak valid');
+            return redirect()->to('/admin/products/items/' . $productId)->with('error', 'File tidak valid atau gagal di-upload.');
         }
 
-        if ($file->getExtension() !== 'csv') {
-            return redirect()->to('/admin/products/items/' . $productId)->with('error', 'Mohon upload file .csv');
+        $clientExt = strtolower($file->getClientExtension());
+        $sysExt    = strtolower($file->getExtension());
+        $ext       = !empty($clientExt) ? $clientExt : $sysExt;
+
+        if (!in_array($ext, ['csv', 'xlsx', 'txt'])) {
+            return redirect()->to('/admin/products/items/' . $productId)->with('error', 'Format file tidak didukung (.'.esc($ext).'). Mohon upload file .csv atau .xlsx');
         }
 
-        $handle = fopen($file->getTempName(), 'r');
-        $headers = fgetcsv($handle); // Skip or validate headers
+        if ($ext === 'xlsx') {
+            $rows = $this->parseXlsxRows($file->getTempName());
+        } else {
+            $rows = $this->parseCsvRows($file->getTempName());
+        }
+
+        if (empty($rows)) {
+            return redirect()->to('/admin/products/items/' . $productId)->with('error', 'File kosong atau format tidak dapat dibaca.');
+        }
+
+        // Header check: if row 0 looks like header row, skip it
+        $firstRow = $rows[0];
+        $col0 = isset($firstRow[0]) ? trim((string)$firstRow[0]) : '';
+        $col1 = isset($firstRow[1]) ? trim((string)$firstRow[1]) : '';
+        if (stripos($col0, 'ID') !== false || stripos($col1, 'Nama') !== false || stripos($col1, 'Item') !== false) {
+            array_shift($rows);
+        }
 
         $countInsert = 0;
         $countUpdate = 0;
-        
-        while (($row = fgetcsv($handle)) !== FALSE) {
-            if (count($row) < 3) continue; // Basic validation (ID, Name, Price required min)
 
-            // Index 0: ID
-            // Index 1: Name
-            // Index 2: Price
-            // Index 3: Sort Order
-            // Index 4: Active
-            // Index 5: Sold
+        foreach ($rows as $row) {
+            if (count($row) < 2) continue;
 
-            $id = isset($row[0]) ? trim($row[0]) : '';
-            
+            $name = isset($row[1]) ? trim((string)$row[1]) : '';
+            if ($name === '') continue; // Skip rows without item name
+
+            $id = isset($row[0]) ? trim((string)$row[0]) : '';
+
             // Handle Price Robustly
-            $priceRaw = $row[2];
-            
-            // 1. Remove common currency symbols and whitespace
+            $priceRaw = isset($row[2]) ? (string)$row[2] : '0';
             $priceClean = preg_replace('/[Rp\$\s]/i', '', $priceRaw);
-            
-            // 2. Handle known decimal endings (.00 or ,00) which cause the "Millions" bug
-            // If it ends with .00, remove it.
+
             if (str_ends_with($priceClean, '.00')) {
                 $priceClean = substr($priceClean, 0, -3);
             }
-            // If it ends with ,00, remove it.
             if (str_ends_with($priceClean, ',00')) {
                 $priceClean = substr($priceClean, 0, -3);
             }
-            
-            // 3. Advanced Decimal Detection
-            // If we still have decimals like .50 or ,50
+
             if (strpos($priceClean, '.') !== false && strpos($priceClean, ',') !== false) {
-                // Both exist (e.g. 30.000,00 or 30,000.00)
-                // The last one is the decimal separator
                 if (strrpos($priceClean, ',') > strrpos($priceClean, '.')) {
-                    // 30.000,50 -> Cut at comma
                     $priceClean = explode(',', $priceClean)[0];
                 } else {
-                    // 30,000.50 -> Cut at dot
                     $priceClean = explode('.', $priceClean)[0];
                 }
             } elseif (strpos($priceClean, ',') !== false) {
-                // Only comma (30,000 or 30000,50)
-                // Only treat as decimal if it's NOT a thousands separator.
-                // Thousands separator usually is correctly placed (3 digits).
-                // Decimal usually at end (2 digits).
                 if (preg_match('/,[0-9]{2}$/', $priceClean)) {
                      $priceClean = explode(',', $priceClean)[0];
                 }
             } elseif (strpos($priceClean, '.') !== false) {
-                // Only dot (30.000 or 30000.50)
                  if (preg_match('/\.[0-9]{2}$/', $priceClean)) {
                      $priceClean = explode('.', $priceClean)[0];
                 }
             }
-            
-            // 4. Finally, keep only digits
+
             $price = (int) preg_replace('/[^0-9]/', '', $priceClean);
-            
+
             $data = [
                 'product_id' => $productId,
-                'name'       => $row[1],
+                'name'       => $name,
                 'price'      => $price,
-                'sort_order' => isset($row[3]) && $row[3] !== '' ? (int) $row[3] : 0,
-                'is_active'  => isset($row[4]) && $row[4] !== '' ? (int) $row[4] : 1,
-                'sold'       => isset($row[5]) && $row[5] !== '' ? (int) $row[5] : 0,
+                'sort_order' => isset($row[3]) && trim((string)$row[3]) !== '' ? (int) $row[3] : 0,
+                'is_active'  => isset($row[4]) && trim((string)$row[4]) !== '' ? (int) $row[4] : 1,
+                'sold'       => isset($row[5]) && trim((string)$row[5]) !== '' ? (int) $row[5] : 0,
             ];
 
             if (!empty($id) && is_numeric($id)) {
-                // UPDATE existing item
-                // Optional: Verify this item belongs to current product for safety
                 $existingItem = $this->itemModel->find($id);
                 if ($existingItem && $existingItem['product_id'] == $productId) {
                     $this->itemModel->update($id, $data);
                     $countUpdate++;
+                } else {
+                    // If ID does not belong to this product or does not exist, insert as new item
+                    $this->itemModel->insert($data);
+                    $countInsert++;
                 }
             } else {
                 // INSERT new item
@@ -635,9 +778,8 @@ class Admin extends BaseController
                 $countInsert++;
             }
         }
-        fclose($handle);
 
-        $msg = "Import selesai: $countInsert ditambah, $countUpdate diupdate.";
+        $msg = "Import selesai: $countInsert item baru ditambahkan, $countUpdate item diupdate.";
         return redirect()->to('/admin/products/items/' . $productId)->with('success', $msg);
     }
 
@@ -655,10 +797,12 @@ class Admin extends BaseController
 
         $filename = "export_items_" . $product['slug'] . "_" . date('Ymd_His') . ".csv";
         
-        header('Content-Type: text/csv');
+        header('Content-Type: text/csv; charset=UTF-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         
         $output = fopen('php://output', 'w');
+        // Write UTF-8 BOM for Microsoft Excel compatibility
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
         // Headers
         fputcsv($output, ['ID (JANGAN UBAH)', 'Nama Item', 'Harga', 'Urutan', 'Aktif (1=Ya 0=Tidak)', 'Terjual']);
@@ -1219,7 +1363,7 @@ class Admin extends BaseController
         $order = $orderModel->getOrderByNumber($orderNumber);
 
         if (!$order) {
-            if ($this->request->isAJAX()) {
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
                 return $this->response->setJSON(['success' => false, 'message' => 'Pesanan tidak ditemukan']);
             }
             return redirect()->back()->with('error', 'Pesanan tidak ditemukan');
@@ -1267,7 +1411,7 @@ class Admin extends BaseController
         $orderWorkerModel = new \App\Models\OrderWorkerModel();
         $orderWorkerModel->syncOrderWorkers($order['id'], $cleanWorkerIds);
 
-        if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Penugasan pekerja berhasil disimpan.',
@@ -1428,6 +1572,106 @@ class Admin extends BaseController
 
         $msg = (float)$usage['quantity'] > 0 ? 'Pemakaian stok dihapus, stok dikembalikan' : 'Catatan pemakaian stok dihapus';
         return $this->response->setJSON(['success' => true, 'message' => $msg]);
+    }
+
+    /**
+     * Hapus pesanan secara bersih berdasarkan kode pesanan (order_number)
+     * Khusus role admin & superadmin
+     */
+    public function deleteOrderByNumber($orderNumber = null)
+    {
+        // 1. Validasi hak akses (Hanya Admin & Superadmin, Worker dilarang)
+        if (session()->get('role') === 'worker') {
+            $msg = 'Akses ditolak: Hanya Admin dan Super Admin yang dapat menghapus pesanan.';
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
+                return $this->response->setJSON(['success' => false, 'message' => $msg])->setStatusCode(403);
+            }
+            return redirect()->to('/admin/orders')->with('error', $msg);
+        }
+
+        if (empty($orderNumber)) {
+            $msg = 'Kode pesanan tidak boleh kosong.';
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
+                return $this->response->setJSON(['success' => false, 'message' => $msg])->setStatusCode(400);
+            }
+            return redirect()->to('/admin/orders')->with('error', $msg);
+        }
+
+        $orderModel = new OrderModel();
+        $order = $orderModel->where('order_number', $orderNumber)->first();
+
+        if (!$order) {
+            $msg = "Pesanan dengan kode {$orderNumber} tidak ditemukan.";
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
+                return $this->response->setJSON(['success' => false, 'message' => $msg])->setStatusCode(404);
+            }
+            return redirect()->to('/admin/orders')->with('error', $msg);
+        }
+
+        $db                  = \Config\Database::connect();
+        $orderItemModel      = new \App\Models\OrderItemModel();
+        $usageModel          = new \App\Models\OrderStockUsageModel();
+        $inventoryModel      = new \App\Models\InventoryModel();
+        $inventoryStockModel = new \App\Models\InventoryStockModel();
+
+        $db->transStart();
+
+        // 2. Kembalikan stok bahan yang pernah dicatat pada pesanan ini
+        $usages = $usageModel->where('order_number', $order['order_number'])->findAll();
+        foreach ($usages as $usage) {
+            if ((float)$usage['quantity'] > 0) {
+                $branchId  = !empty($usage['branch_id']) ? (int)$usage['branch_id'] : 1;
+                $inventory = $inventoryModel->find($usage['inventory_id']);
+                if ($inventory) {
+                    $currentStock = $inventoryStockModel->getStock((int)$usage['inventory_id'], $branchId);
+                    $unitValue    = (float)($inventory['unit_value'] ?? 0);
+                    if ($unitValue > 0) {
+                        $pcsToRestore = $usage['quantity'] / $unitValue;
+                        $newStock     = $currentStock + $pcsToRestore;
+                    } else {
+                        $newStock     = $currentStock + $usage['quantity'];
+                    }
+                    $inventoryStockModel->setStock((int)$usage['inventory_id'], $branchId, $newStock);
+
+                    // Update total summary in inventories table
+                    $sum = $db->table('inventory_stocks')->where('inventory_id', $usage['inventory_id'])->selectSum('stock')->get()->getRow();
+                    if ($sum) {
+                        $inventoryModel->update($inventory['id'], ['stock' => (float)$sum->stock]);
+                    }
+                }
+            }
+        }
+
+        // Hapus catatan pemakaian stok
+        $usageModel->where('order_number', $order['order_number'])->delete();
+
+        // 3. Hapus penugasan pekerja (order_workers) jika tabel ada
+        if ($db->tableExists('order_workers')) {
+            $db->table('order_workers')->where('order_id', $order['id'])->delete();
+        }
+
+        // 4. Hapus item layanan pesanan (order_items)
+        $orderItemModel->where('order_id', $order['id'])->delete();
+
+        // 5. Hapus pesanan utama (orders)
+        $orderModel->delete($order['id']);
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            $msg = "Gagal menghapus pesanan {$orderNumber}. Terjadi kesalahan database.";
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
+                return $this->response->setJSON(['success' => false, 'message' => $msg])->setStatusCode(500);
+            }
+            return redirect()->to('/admin/orders')->with('error', $msg);
+        }
+
+        $successMsg = "Pesanan {$orderNumber} berhasil dihapus secara bersih (item, penugasan pekerja, dan stok bahan dikembalikan).";
+        if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
+            return $this->response->setJSON(['success' => true, 'message' => $successMsg]);
+        }
+
+        return redirect()->to('/admin/orders')->with('success', $successMsg);
     }
 
     /**
@@ -1666,7 +1910,7 @@ class Admin extends BaseController
         $order = $orderModel->getOrderByNumber($orderNumber);
 
         if (!$order) {
-            if ($this->request->isAJAX()) {
+            if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Pesanan tidak ditemukan'])->setStatusCode(404);
             }
             return redirect()->to('/admin/orders')->with('error', 'Pesanan tidak ditemukan');
@@ -1708,7 +1952,7 @@ class Admin extends BaseController
             'total_amount'     => $finalTotal,
         ]);
 
-        if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
             return $this->response->setJSON([
                 'status'             => 'success',
                 'subtotal'           => $subtotal,
@@ -2372,7 +2616,7 @@ class Admin extends BaseController
         
         $inventoryModel->update($id, $data);
 
-        if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX() || $this->request->hasHeader('X-Requested-With')) {
             return $this->response->setJSON([
                 'success'      => true,
                 'message'      => 'Stok berhasil diupdate',
@@ -2399,22 +2643,41 @@ class Admin extends BaseController
     }
 
     /**
-     * Import Inventory from CSV
+     * Import Inventory from CSV / XLSX
      */
     public function importInventory()
     {
         $file = $this->request->getFile('csv_file');
         
         if (!$file || !$file->isValid()) {
-            return redirect()->to('/admin/inventory')->with('error', 'File tidak valid');
+            return redirect()->to('/admin/inventory')->with('error', 'File tidak valid atau gagal di-upload.');
         }
 
-        if ($file->getExtension() !== 'csv') {
-            return redirect()->to('/admin/inventory')->with('error', 'Mohon upload file .csv');
+        $clientExt = strtolower($file->getClientExtension());
+        $sysExt    = strtolower($file->getExtension());
+        $ext       = !empty($clientExt) ? $clientExt : $sysExt;
+
+        if (!in_array($ext, ['csv', 'xlsx', 'txt'])) {
+            return redirect()->to('/admin/inventory')->with('error', 'Format file tidak didukung (.'.esc($ext).'). Mohon upload file .csv atau .xlsx');
         }
 
-        $handle = fopen($file->getTempName(), 'r');
-        $headers = fgetcsv($handle); // Skip header
+        if ($ext === 'xlsx') {
+            $rows = $this->parseXlsxRows($file->getTempName());
+        } else {
+            $rows = $this->parseCsvRows($file->getTempName());
+        }
+
+        if (empty($rows)) {
+            return redirect()->to('/admin/inventory')->with('error', 'File kosong atau format tidak dapat dibaca.');
+        }
+
+        // Header check
+        $firstRow = $rows[0];
+        $col0 = isset($firstRow[0]) ? trim((string)$firstRow[0]) : '';
+        $col1 = isset($firstRow[1]) ? trim((string)$firstRow[1]) : '';
+        if (stripos($col0, 'ID') !== false || stripos($col1, 'Nama') !== false || stripos($col1, 'Barang') !== false) {
+            array_shift($rows);
+        }
 
         $countInsert = 0;
         $countUpdate = 0;
@@ -2423,30 +2686,25 @@ class Admin extends BaseController
         $inventoryStockModel = new \App\Models\InventoryStockModel();
         $activeBranchId      = $this->getActiveBranchId() ?? 1;
         
-        while (($row = fgetcsv($handle)) !== FALSE) {
-            // Count might be 1 if it's a single string separated by semicolons due to wrong format
-            if (count($row) === 1 && strpos($row[0], ';') !== false) {
-                $row = explode(';', $row[0]);
-            }
-            
-            if (count($row) < 3) continue; // Basic validation (ID, Name, Stock required min)
+        foreach ($rows as $row) {
+            if (count($row) < 2) continue;
 
-            $id = isset($row[0]) ? trim($row[0]) : '';
-            $name = isset($row[1]) ? trim($row[1]) : '';
+            $name = isset($row[1]) ? trim((string)$row[1]) : '';
+            if (empty($name)) continue;
+
+            $id = isset($row[0]) ? trim((string)$row[0]) : '';
             
             // Handle Stock (prevent issues if it contains commas or strings)
-            $stockRaw = isset($row[2]) ? $row[2] : '0';
+            $stockRaw = isset($row[2]) ? (string)$row[2] : '0';
             $stockClean = preg_replace('/[^0-9\-\.]/', '', str_replace(',', '.', $stockRaw));
             $stock = (float) $stockClean;
             
-            $unit = isset($row[3]) && trim($row[3]) !== '' ? trim($row[3]) : 'pcs';
-            $sub_unit = isset($row[4]) && trim($row[4]) !== '' ? trim($row[4]) : 'ml';
+            $unit = isset($row[3]) && trim((string)$row[3]) !== '' ? trim((string)$row[3]) : 'pcs';
+            $sub_unit = isset($row[4]) && trim((string)$row[4]) !== '' ? trim((string)$row[4]) : 'ml';
             
-            $unitValueRaw = isset($row[5]) ? $row[5] : '';
+            $unitValueRaw = isset($row[5]) ? (string)$row[5] : '';
             $unitValueClean = preg_replace('/[^0-9\-\.]/', '', str_replace(',', '.', $unitValueRaw));
             $unitValue = $unitValueClean !== '' ? (float) $unitValueClean : null;
-
-            if (empty($name)) continue;
 
             $data = [
                 'name'       => $name,
@@ -2473,9 +2731,8 @@ class Admin extends BaseController
                 $countInsert++;
             }
         }
-        fclose($handle);
 
-        $msg = "Import selesai: $countInsert ditambah, $countUpdate diupdate.";
+        $msg = "Import selesai: $countInsert barang baru ditambahkan, $countUpdate barang diupdate.";
         return redirect()->to('/admin/inventory')->with('success', $msg);
     }
 
@@ -2490,10 +2747,12 @@ class Admin extends BaseController
 
         $filename = "export_inventory_" . date('Ymd_His') . ".csv";
         
-        header('Content-Type: text/csv');
+        header('Content-Type: text/csv; charset=UTF-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         
         $output = fopen('php://output', 'w');
+        // Write UTF-8 BOM for Microsoft Excel compatibility
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
         fputcsv($output, ['ID (JANGAN UBAH)', 'Nama Stok', 'Jumlah Stok', 'Kemasan', 'Satuan Isi', 'Isi / Kemasan']);
         
